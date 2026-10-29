@@ -190,7 +190,7 @@
       setMessage("Запрашиваю доступ к камере…");
       const scanConfig = { fps: 10, qrbox: { width: 250, height: 250 } };
       const onSuccess = text => {
-        if (processing) return;
+        if (processing || document.getElementById("result-overlay").classList.contains("visible")) return;
         processing = true;
         checkQr(text);
         window.setTimeout(() => { processing = false; }, 1800);
