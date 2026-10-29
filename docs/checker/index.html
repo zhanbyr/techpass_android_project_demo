@@ -29,7 +29,7 @@
     textarea { display: block; width: 100%; min-height: 76px; resize: vertical; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font: 14px/1.45 ui-monospace, monospace; }
     .result { display: none; }
     .result.visible { display: block; }
-    .profile-photo { display: block; width: 120px; height: 150px; margin: 10px 0; object-fit: cover; border: 1px solid #dce4ed; border-radius: 12px; } .profile-photo[hidden] { display: none; } .status { display: inline-block; padding: 5px 10px; border-radius: 99px; font-size: .82rem; font-weight: 800; }
+    .profile-photo { display: block; width: 120px; height: 150px; margin: 10px 0; object-fit: cover; border: 5px solid #cbd5e1; border-radius: 12px; transition: border-color .2s, box-shadow .2s; } .profile-photo[hidden] { display: none; } .profile-photo.portrait-green { border-color: #16834b; box-shadow: 0 0 0 3px #e2f6eb; } .profile-photo.portrait-amber { border-color: #d39b00; box-shadow: 0 0 0 3px #fff2cc; } .profile-photo.portrait-red { border-color: #c83227; box-shadow: 0 0 0 3px #ffebe9; } .status { display: inline-block; padding: 5px 10px; border-radius: 99px; font-size: .82rem; font-weight: 800; }
     .green { color: #09663c; background: #e2f6eb; }
     .amber { color: #805700; background: #fff2cc; }
     .red { color: #a32118; background: #ffebe9; }
@@ -143,7 +143,7 @@
         return;
       }
 
-      const colors = { ok: "green", limited: "amber", expired: "red", revoked: "red" };
+      const colors = { ok: "green", limited: "amber", expired: "amber", revoked: "red" };
       showResult("Профиль найден в демо-списке", profile.label, colors[profile.state], [
         ["ФИО", profile.name],
         ["Компания", profile.company],
@@ -152,7 +152,7 @@
         ["Допуск до", profile.until],
         ["Ограничения", profile.limit]
       ], "Формат токена совпадает с демо-форматом; его подлинность не проверена.");
-      const photo = document.getElementById("profile-photo"); photo.src = "avatars/" + account + ".jpg"; photo.alt = "Фото профиля: " + profile.name; photo.hidden = false;
+      const photo = document.getElementById("profile-photo"); photo.classList.remove("portrait-green", "portrait-amber", "portrait-red"); photo.classList.add(({ ok: "portrait-green", limited: "portrait-amber", expired: "portrait-amber", revoked: "portrait-red" })[profile.state]); photo.src = "avatars/" + account + ".jpg"; photo.alt = "Фото профиля: " + profile.name; photo.hidden = false;
       setMessage("QR считан. Камеру можно выключить или отсканировать следующий код.");
     }
 
