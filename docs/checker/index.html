@@ -157,21 +157,45 @@
     async function startCamera() {
       startButton.disabled = true;
       setMessage("Запрашиваю доступ к камере…");
+      const scanConfig = { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1 };
+      const onSuccess = text => {
+        if (processing) return;
+        processing = true;
+        checkQr(text);
+        window.setTimeout(() => { processing = false; }, 1800);
+      };
       try {
-        const cameras = await Html5Qrcode.getCameras();
-        if (!cameras.length) throw new Error("Камера не найдена.");
-        const preferred = cameras.find(camera => /back|rear|environment|задн/i.test(camera.label)) || cameras[cameras.length - 1];
-        await reader.start(preferred.id, { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1 }, text => {
-          if (processing) return;
-          processing = true;
-          checkQr(text);
-          window.setTimeout(() => { processing = false; }, 1800);
-        }, () => {});
-        cameraRunning = true;
+        try {
+          // On phones, a facing-mode constraint is often more reliable than
+          // selecting a camera ID returned by the browser.
+          await reader.start({ facingMode: "environment" }, scanConfig, onSuccess, () => {});
+          cameraRunning = true;
+        } catch (preferredError) {
+          // Some browsers do not support facingMode. Fall back to enumerated
+          // camera IDs and try the likely rear camera before other cameras.
+          try { reader.clear(); } catch {}
+          const cameras = await Html5Qrcode.getCameras();
+          const preferred = cameras.find(camera => /back|rear|environment|задн/i.test(camera.label));
+          const candidates = [preferred, ...cameras.filter(camera => camera.id !== preferred?.id)].filter(Boolean);
+          if (!candidates.length) throw preferredError;
+          let lastError = preferredError;
+          for (const camera of candidates) {
+            try {
+              await reader.start(camera.id, scanConfig, onSuccess, () => {});
+              cameraRunning = true;
+              break;
+            } catch (error) {
+              lastError = error;
+              try { reader.clear(); } catch {}
+            }
+          }
+          if (!cameraRunning) throw lastError;
+        }
         stopButton.disabled = false;
         setMessage("Камера включена. Наведите её на QR-код.");
       } catch (error) {
-        setMessage(error?.message || "Не удалось запустить камеру. Проверьте разрешение браузера.", true);
+        const detail = error?.message || "неизвестная ошибка";
+        setMessage("Браузер не смог запустить камеру. Проверьте разрешение сайта и закройте другие приложения, использующие камеру. Если не получится, выберите фото с QR-кодом ниже. (" + detail + ")", true);
       } finally {
         startButton.disabled = cameraRunning;
       }
@@ -221,4 +245,5 @@
   </script>
 </body>
 </html>
+
 
