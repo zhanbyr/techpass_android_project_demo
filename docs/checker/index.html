@@ -27,8 +27,13 @@
     #file-input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
     .paste-label { display: block; margin: 14px 0 6px; font-size: .9rem; font-weight: 700; }
     textarea { display: block; width: 100%; min-height: 76px; resize: vertical; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font: 14px/1.45 ui-monospace, monospace; }
-    .result { display: none; }
+    .result-overlay { display: none; position: fixed; inset: 0; z-index: 1000; align-items: center; justify-content: center; padding: 16px; background: rgb(10 20 35 / 72%); overscroll-behavior: contain; }
+    .result-overlay.visible { display: flex; }
+    body.result-open { overflow: hidden; }
+    .result { display: none; position: relative; width: min(520px, 100%); max-height: calc(100dvh - 32px); overflow-y: auto; margin: 0; }
     .result.visible { display: block; }
+    .result-close { position: absolute; top: 12px; right: 12px; display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; padding: 0; border-radius: 50%; color: #26334a; background: #e9eef5; font-size: 28px; line-height: 1; }
+    #result-title { padding-right: 48px; }
     .profile-photo { display: block; width: 120px; height: 150px; margin: 10px 0; object-fit: cover; border: 5px solid #cbd5e1; border-radius: 12px; transition: border-color .2s, box-shadow .2s; } .profile-photo[hidden] { display: none; } .profile-photo.portrait-green { border-color: #16834b; box-shadow: 0 0 0 3px #e2f6eb; } .profile-photo.portrait-amber { border-color: #d39b00; box-shadow: 0 0 0 3px #fff2cc; } .profile-photo.portrait-red { border-color: #c83227; box-shadow: 0 0 0 3px #ffebe9; } .status { display: inline-block; padding: 5px 10px; border-radius: 99px; font-size: .82rem; font-weight: 800; }
     .green { color: #09663c; background: #e2f6eb; }
     .amber { color: #805700; background: #fff2cc; }
@@ -65,13 +70,16 @@
       <p class="notice">Эта страница считывает QR и показывает локальные тестовые данные. Токен не подписан сервером и не проверяется криптографически. Результат нельзя использовать для реального решения о допуске. Фото персонажей — иллюстрации, а не фотографии сотрудников; они не подтверждают личность.</p>
     </section>
 
-    <section id="result" class="card result" aria-live="polite">
+  </main>
+  <div id="result-overlay" class="result-overlay" aria-hidden="true">
+    <section id="result" class="card result" role="dialog" aria-modal="true" aria-labelledby="result-title" aria-live="polite">
+      <button id="close-result" class="result-close" type="button" aria-label="Закрыть результат">×</button>
       <h2 id="result-title">Результат</h2><img id="profile-photo" class="profile-photo" alt="Фото демо-профиля" hidden>
       <p id="result-status"></p>
       <ul id="result-detail" class="detail"></ul>
       <p id="result-token" class="muted"></p>
     </section>
-  </main>
+  </div>
   <footer>Только вымышленные данные · QR и профиль обрабатываются в браузере</footer>
 
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -114,9 +122,30 @@
         list.append(item);
       }
       document.getElementById("result-token").textContent = tokenText;
-      document.getElementById("result").classList.add("visible");
-      document.getElementById("result").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      const result = document.getElementById("result");
+      result.classList.add("visible");
+      const overlay = document.getElementById("result-overlay");
+      overlay.classList.add("visible");
+      overlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("result-open");
+      document.getElementById("close-result").focus();
     }
+
+    function closeResult() {
+      document.getElementById("result").classList.remove("visible");
+      const overlay = document.getElementById("result-overlay");
+      overlay.classList.remove("visible");
+      overlay.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("result-open");
+    }
+
+    document.getElementById("close-result").addEventListener("click", closeResult);
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && document.getElementById("result-overlay").classList.contains("visible")) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }, true);
 
     function checkQr(rawText) {
       document.getElementById("qr-text").value = rawText;
