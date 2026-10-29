@@ -26,7 +26,11 @@
     #reader video { border-radius: 12px; }
     .page { display: none; }
     .page.active { display: block; }
-    .profile-photo { display: block; width: 120px; height: 150px; margin: 10px 0; object-fit: cover; border: 5px solid #cbd5e1; border-radius: 12px; transition: border-color .2s, box-shadow .2s; } .profile-photo[hidden] { display: none; } .profile-photo.portrait-green { border-color: #16834b; box-shadow: 0 0 0 3px #e2f6eb; } .profile-photo.portrait-amber { border-color: #d39b00; box-shadow: 0 0 0 3px #fff2cc; } .profile-photo.portrait-red { border-color: #c83227; box-shadow: 0 0 0 3px #ffebe9; } .status { display: inline-block; padding: 5px 10px; border-radius: 99px; font-size: .82rem; font-weight: 800; }
+    #result { transition: background-color .2s, border-color .2s; }
+    #result.profile-card-green { background: #e2f6eb; border: 2px solid #16834b; }
+    #result.profile-card-amber { background: #fff2cc; border: 2px solid #d39b00; }
+    #result.profile-card-red { background: #ffebe9; border: 2px solid #c83227; }
+    .profile-photo { display: block; width: 120px; height: 150px; margin: 10px 0; object-fit: cover; border: 1px solid #cbd5e1; border-radius: 12px; } .profile-photo[hidden] { display: none; } .status { display: inline-block; padding: 5px 10px; border-radius: 99px; font-size: .82rem; font-weight: 800; }
     .green { color: #09663c; background: #e2f6eb; }
     .amber { color: #805700; background: #fff2cc; }
     .red { color: #a32118; background: #ffebe9; }
@@ -100,6 +104,9 @@
       const status = document.getElementById("result-status");
       status.textContent = statusText;
       status.className = "status " + statusClass;
+      const resultCard = document.getElementById("result");
+      resultCard.classList.remove("profile-card-green", "profile-card-amber", "profile-card-red");
+      resultCard.classList.add(({ green: "profile-card-green", amber: "profile-card-amber", red: "profile-card-red" })[statusClass] || "profile-card-red");
       const list = document.getElementById("result-detail");
       list.replaceChildren();
       for (const [label, value] of fields) {
@@ -173,7 +180,7 @@
         ["Допуск до", profile.until],
         ["Ограничения", profile.limit]
       ], "Формат токена совпадает с демо-форматом; его подлинность не проверена.");
-      const photo = document.getElementById("profile-photo"); photo.classList.remove("portrait-green", "portrait-amber", "portrait-red"); photo.classList.add(({ ok: "portrait-green", limited: "portrait-amber", expired: "portrait-amber", revoked: "portrait-red" })[profile.state]); photo.src = "avatars/" + account + ".jpg"; photo.alt = "Фото профиля: " + profile.name; photo.hidden = false;
+      const photo = document.getElementById("profile-photo"); photo.src = "avatars/" + account + ".jpg"; photo.alt = "Фото профиля: " + profile.name; photo.hidden = false;
       setMessage("QR считан. Камеру можно выключить или отсканировать следующий код.");
     }
 
