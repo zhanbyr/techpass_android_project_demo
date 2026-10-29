@@ -18,15 +18,12 @@
     p { margin: 8px 0; }
     .muted { color: #59677a; font-size: .9rem; }
     .notice { padding: 12px; border: 1px solid #f1d48b; border-radius: 11px; color: #694b05; background: #fff7df; font-size: .9rem; }
-    button, .file-button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; padding: 10px 15px; border: 0; border-radius: 10px; color: white; background: #2059d4; font: inherit; font-weight: 700; cursor: pointer; }
+    button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; padding: 10px 15px; border: 0; border-radius: 10px; color: white; background: #2059d4; font: inherit; font-weight: 700; cursor: pointer; }
     button.secondary { color: #26334a; background: #e9eef5; }
     button:disabled { opacity: .55; cursor: wait; }
     .controls { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 12px; }
     #reader { overflow: hidden; width: 100%; margin-top: 14px; border-radius: 12px; }
     #reader video { border-radius: 12px; }
-    #file-input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
-    .paste-label { display: block; margin: 14px 0 6px; font-size: .9rem; font-weight: 700; }
-    textarea { display: block; width: 100%; min-height: 76px; resize: vertical; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font: 14px/1.45 ui-monospace, monospace; }
     .result-overlay { display: none; position: fixed; inset: 0; z-index: 1000; align-items: center; justify-content: center; padding: 16px; background: rgb(10 20 35 / 72%); overscroll-behavior: contain; }
     .result-overlay.visible { display: flex; }
     body.result-open { overflow: hidden; }
@@ -51,18 +48,13 @@
   <main>
     <section class="card">
       <h2>Сканирование QR-кода</h2>
-      <p class="muted">Разрешите доступ к камере или выберите фотографию с QR-кодом.</p>
+      <p class="muted">Разрешите доступ к камере и наведите её на QR-код.</p>
       <div class="controls">
         <button id="start-camera" type="button">Включить камеру</button>
         <button id="stop-camera" class="secondary" type="button" disabled>Выключить</button>
-        <label class="file-button secondary" for="file-input">Сканировать фото</label>
-        <input id="file-input" type="file" accept="image/*">
       </div>
       <div id="reader" aria-label="Окно камеры"></div>
       <p id="scan-message" class="muted" role="status" aria-live="polite">Камера выключена.</p>
-      <label class="paste-label" for="qr-text">Или вставьте содержимое QR-кода</label>
-      <textarea id="qr-text" placeholder='{"app":"TechPassDemo","token":"TPD-…","account":"…"}'></textarea>
-      <div class="controls"><button id="check-text" class="secondary" type="button">Проверить содержимое</button></div>
     </section>
 
     <section class="card">
@@ -148,7 +140,6 @@
     }, true);
 
     function checkQr(rawText) {
-      document.getElementById("qr-text").value = rawText;
       let payload;
       try {
         payload = JSON.parse(rawText);
@@ -226,7 +217,7 @@
         setMessage("Камера включена. Наведите её на QR-код.");
       } catch (error) {
         const detail = error?.message || "неизвестная ошибка";
-        setMessage("Браузер не смог запустить камеру. Проверьте разрешение сайта и закройте другие приложения, использующие камеру. Если не получится, выберите фото с QR-кодом ниже. (" + detail + ")", true);
+        setMessage("Браузер не смог запустить камеру. Проверьте разрешение сайта и закройте другие приложения, использующие камеру. (" + detail + ")", true);
       } finally {
         startButton.disabled = cameraRunning;
       }
@@ -249,28 +240,9 @@
 
     startButton.addEventListener("click", startCamera);
     stopButton.addEventListener("click", stopCamera);
-    document.getElementById("check-text").addEventListener("click", () => {
-      const text = document.getElementById("qr-text").value.trim();
-      if (text) checkQr(text);
-      else setMessage("Сначала вставьте содержимое QR-кода.", true);
-    });
-    document.getElementById("file-input").addEventListener("change", async event => {
-      const file = event.target.files?.[0];
-      if (!file) return;
-      setMessage("Сканирую изображение…");
-      try {
-        checkQr(await reader.scanFile(file, true));
-        setMessage("QR считан из изображения.");
-      } catch {
-        setMessage("Не удалось найти QR-код на изображении.", true);
-      } finally {
-        event.target.value = "";
-      }
-    });
 
     if (!window.Html5Qrcode) {
       startButton.disabled = true;
-      document.getElementById("file-input").disabled = true;
       setMessage("Не удалось загрузить модуль сканирования. Проверьте подключение к интернету.", true);
     }
   </script>
