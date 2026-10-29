@@ -29,7 +29,7 @@
     textarea { display: block; width: 100%; min-height: 76px; resize: vertical; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font: 14px/1.45 ui-monospace, monospace; }
     .result { display: none; }
     .result.visible { display: block; }
-    .status { display: inline-block; padding: 5px 10px; border-radius: 99px; font-size: .82rem; font-weight: 800; }
+    .profile-photo { display: block; width: 120px; height: 150px; margin: 10px 0; object-fit: cover; border: 1px solid #dce4ed; border-radius: 12px; } .profile-photo[hidden] { display: none; } .status { display: inline-block; padding: 5px 10px; border-radius: 99px; font-size: .82rem; font-weight: 800; }
     .green { color: #09663c; background: #e2f6eb; }
     .amber { color: #805700; background: #fff2cc; }
     .red { color: #a32118; background: #ffebe9; }
@@ -66,7 +66,7 @@
     </section>
 
     <section id="result" class="card result" aria-live="polite">
-      <h2 id="result-title">Результат</h2>
+      <h2 id="result-title">Результат</h2><img id="profile-photo" class="profile-photo" alt="Фото демо-профиля" hidden>
       <p id="result-status"></p>
       <ul id="result-detail" class="detail"></ul>
       <p id="result-token" class="muted"></p>
@@ -98,7 +98,7 @@
       message.classList.toggle("error", isError);
     }
 
-    function showResult(title, statusText, statusClass, fields, tokenText) {
+    function showResult(title, statusText, statusClass, fields, tokenText) {\n      document.getElementById("profile-photo").hidden = true;
       document.getElementById("result-title").textContent = title;
       const status = document.getElementById("result-status");
       status.textContent = statusText;
@@ -151,7 +151,7 @@
         ["Допуск до", profile.until],
         ["Ограничения", profile.limit]
       ], "Формат токена совпадает с демо-форматом; его подлинность не проверена.");
-      setMessage("QR считан. Камеру можно выключить или отсканировать следующий код.");
+      const photo = document.getElementById("profile-photo"); photo.src = "avatars/" + account + ".png"; photo.alt = "Фото профиля: " + profile.name; photo.hidden = false;\n      setMessage("QR считан. Камеру можно выключить или отсканировать следующий код.");
     }
 
     async function startCamera() {
