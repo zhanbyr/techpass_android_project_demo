@@ -98,7 +98,8 @@
       message.classList.toggle("error", isError);
     }
 
-    function showResult(title, statusText, statusClass, fields, tokenText) {\n      document.getElementById("profile-photo").hidden = true;
+    function showResult(title, statusText, statusClass, fields, tokenText) {
+      document.getElementById("profile-photo").hidden = true;
       document.getElementById("result-title").textContent = title;
       const status = document.getElementById("result-status");
       status.textContent = statusText;
@@ -151,7 +152,8 @@
         ["Допуск до", profile.until],
         ["Ограничения", profile.limit]
       ], "Формат токена совпадает с демо-форматом; его подлинность не проверена.");
-      const photo = document.getElementById("profile-photo"); photo.src = "avatars/" + account + ".png"; photo.alt = "Фото профиля: " + profile.name; photo.hidden = false;\n      setMessage("QR считан. Камеру можно выключить или отсканировать следующий код.");
+      const photo = document.getElementById("profile-photo"); photo.src = "avatars/" + account + ".png"; photo.alt = "Фото профиля: " + profile.name; photo.hidden = false;
+      setMessage("QR считан. Камеру можно выключить или отсканировать следующий код.");
     }
 
     async function startCamera() {
