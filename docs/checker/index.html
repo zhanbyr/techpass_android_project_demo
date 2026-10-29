@@ -157,7 +157,7 @@
     async function startCamera() {
       startButton.disabled = true;
       setMessage("Запрашиваю доступ к камере…");
-      const scanConfig = { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1 };
+      const scanConfig = { fps: 10, qrbox: { width: 250, height: 250 } };
       const onSuccess = text => {
         if (processing) return;
         processing = true;
@@ -245,5 +245,6 @@
   </script>
 </body>
 </html>
+
 
 
