@@ -140,16 +140,21 @@ final class RegistryDbHelper extends SQLiteOpenHelper {
             validateDirections(allowed,max,directionIds);
             ContentValues values=new ContentValues();values.put("full_name",fullName.trim().replaceAll("\\s+"," "));values.put("company_id",companyId);db.update("employees",values,"id=?",new String[]{id});
             Cursor active=db.rawQuery("SELECT id,direction_id FROM assignments WHERE employee_id=? AND status='active'",new String[]{id});List<String> oldActiveIds=new java.util.ArrayList<>();List<String> oldDirectionIds=new java.util.ArrayList<>();while(active.moveToNext()){oldActiveIds.add(active.getString(0));oldDirectionIds.add(active.getString(1));}active.close();
+            String oldProfile=oldName+" · "+oldCompany+" · "+joinStrings(oldDirectionIds);
             boolean companyChanged=!oldCompany.equals(companyId);Set<String> requested=new HashSet<>(directionIds);List<String> added=new java.util.ArrayList<>();
-            for(int i=0;i<oldActiveIds.size();i++){String oldDirection=oldDirectionIds.get(i);if(companyChanged||!requested.contains(oldDirection)){ContentValues closed=new ContentValues();closed.put("status","closed");closed.put("ended_at",now);closed.put("comment",companyChanged?"Закрыто при смене компании":"Закрыто при изменении назначений");db.update("assignments",closed,"id=?",new String[]{oldActiveIds.get(i)});}else requested.remove(oldDirection);}
+            for(int i=0;i<oldActiveIds.size();i++){String oldDirection=oldDirectionIds.get(i);if(companyChanged||!requested.contains(oldDirection)){ContentValues closed=new ContentValues();closed.put("status","closed");closed.put("ended_at",now);closed.put("comment",companyChanged?"Закрыто при смене компании":"Закрыто при изменении назначений");db.update("assignments",closed,"id=?",new String[]{oldActiveIds.get(i)});audit(db,"assignment.closed",oldActiveIds.get(i),"active · "+oldCompany+" · "+oldDirection,"closed · "+now);}else requested.remove(oldDirection);}
             added.addAll(requested);
             if("active".equals(status)&&!added.isEmpty())insertAssignments(db,id,companyId,added,now,companyChanged?"Назначение после смены компании":"Новое назначение");
-            audit(db,"employee.updated",id,oldName+" · "+oldCompany,fullName.trim()+" · "+companyId);db.setTransactionSuccessful();
+            String newProfile=fullName.trim().replaceAll("\\s+"," ")+" · "+companyId+" · "+joinStrings(directionIds);
+            if(!oldName.equals(fullName.trim().replaceAll("\\s+"," ")))audit(db,"employee.name.changed",id,oldName,fullName.trim().replaceAll("\\s+"," "));
+            if(companyChanged)audit(db,"employee.company.changed",id,oldCompany,companyId);
+            if(!new HashSet<>(oldDirectionIds).equals(new HashSet<>(directionIds)))audit(db,"employee.directions.changed",id,joinStrings(oldDirectionIds),joinStrings(directionIds));
+            audit(db,"employee.updated",id,oldProfile,newProfile);db.setTransactionSuccessful();
         } finally {db.endTransaction();}
     }
 
     private void validateDirections(String allowed,int max,List<String> ids){if(ids==null||ids.isEmpty())throw new IllegalArgumentException("Выберите хотя бы одно направление.");if(ids.size()>Math.min(3,max))throw new IllegalArgumentException("Превышен лимит направлений компании.");Set<String> policy=allowedSet(allowed);Set<String> unique=new HashSet<>(ids);if(unique.size()!=ids.size())throw new IllegalArgumentException("Одно направление выбрано несколько раз.");for(String id:ids)if(!policy.contains(id))throw new IllegalArgumentException("Это направление запрещено для компании.");}
-    private void insertAssignments(SQLiteDatabase db,String employeeId,String companyId,List<String> ids,String now,String comment){for(String directionId:ids){Cursor n=db.rawQuery("SELECT COUNT(*) FROM assignments WHERE employee_id=?",new String[]{employeeId});int serial=n.moveToFirst()?n.getInt(0)+1:1;n.close();ContentValues a=new ContentValues();a.put("id",employeeId+"-ASN-"+serial);a.put("employee_id",employeeId);a.put("company_id",companyId);a.put("direction_id",directionId);a.put("started_at",now);a.put("status","active");a.put("comment",comment);db.insertOrThrow("assignments",null,a);}}
+    private void insertAssignments(SQLiteDatabase db,String employeeId,String companyId,List<String> ids,String now,String comment){for(String directionId:ids){Cursor n=db.rawQuery("SELECT COUNT(*) FROM assignments WHERE employee_id=?",new String[]{employeeId});int serial=n.moveToFirst()?n.getInt(0)+1:1;n.close();String assignmentId=employeeId+"-ASN-"+serial;ContentValues a=new ContentValues();a.put("id",assignmentId);a.put("employee_id",employeeId);a.put("company_id",companyId);a.put("direction_id",directionId);a.put("started_at",now);a.put("status","active");a.put("comment",comment);db.insertOrThrow("assignments",null,a);audit(db,"assignment.created",assignmentId,null,"active · "+companyId+" · "+directionId+" · "+now);}}
 
     synchronized void setEmployeeStatus(String id, boolean active) {
         SQLiteDatabase db = getWritableDatabase(); String now = timestamp(); db.beginTransaction();
@@ -158,7 +163,9 @@ final class RegistryDbHelper extends SQLiteOpenHelper {
             if (!current.moveToFirst()) throw new IllegalArgumentException("Сотрудник не найден.");
             boolean wasActive = "active".equals(current.getString(0)); current.close(); if (wasActive == active) { db.setTransactionSuccessful(); return; }
             ContentValues employee = new ContentValues(); employee.put("status", active ? "active" : "inactive"); db.update("employees", employee, "id=?", new String[]{id});
+            Cursor active=db.rawQuery("SELECT id,company_id,direction_id FROM assignments WHERE employee_id=? AND status='active'",new String[]{id});List<String[]> closedAssignments=new java.util.ArrayList<>();while(active.moveToNext())closedAssignments.add(new String[]{active.getString(0),active.getString(1),active.getString(2)});active.close();
             ContentValues assignment = new ContentValues(); assignment.put("status", "closed"); assignment.put("ended_at", now); db.update("assignments", assignment, "employee_id=? AND status='active'", new String[]{id});
+            for(String[] closed:closedAssignments)audit(db,"assignment.closed",closed[0],"active · "+closed[1]+" · "+closed[2],"closed · "+now);
             if (active) {
                 Cursor company = db.rawQuery("SELECT e.company_id,c.allowed,c.status FROM employees e JOIN companies c ON c.id=e.company_id WHERE e.id=?", new String[]{id});
                 if (!company.moveToFirst() || !"active".equals(company.getString(2))) { company.close(); throw new IllegalArgumentException("Нельзя активировать профиль в неактивной компании."); }
