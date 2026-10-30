@@ -103,8 +103,10 @@ final class RegistryDbHelper extends SQLiteOpenHelper {
             validateDirections(allowed,max,directionIds);
             ContentValues values=new ContentValues();values.put("full_name",fullName.trim().replaceAll("\\s+"," "));values.put("company_id",companyId);db.update("employees",values,"id=?",new String[]{id});
             Cursor active=db.rawQuery("SELECT id,direction_id FROM assignments WHERE employee_id=? AND status='active'",new String[]{id});List<String> oldActiveIds=new java.util.ArrayList<>();List<String> oldDirectionIds=new java.util.ArrayList<>();while(active.moveToNext()){oldActiveIds.add(active.getString(0));oldDirectionIds.add(active.getString(1));}active.close();
-            for(String assignmentId:oldActiveIds){ContentValues closed=new ContentValues();closed.put("status","closed");closed.put("ended_at",now);closed.put("comment","Закрыто при изменении профиля/компании");db.update("assignments",closed,"id=?",new String[]{assignmentId});}
-            if("active".equals(status))insertAssignments(db,id,companyId,directionIds,now,oldCompany.equals(companyId)?"Изменение назначений":"Назначение после смены компании");
+            boolean companyChanged=!oldCompany.equals(companyId);Set<String> requested=new HashSet<>(directionIds);List<String> added=new java.util.ArrayList<>();
+            for(int i=0;i<oldActiveIds.size();i++){String oldDirection=oldDirectionIds.get(i);if(companyChanged||!requested.contains(oldDirection)){ContentValues closed=new ContentValues();closed.put("status","closed");closed.put("ended_at",now);closed.put("comment",companyChanged?"Закрыто при смене компании":"Закрыто при изменении назначений");db.update("assignments",closed,"id=?",new String[]{oldActiveIds.get(i)});}else requested.remove(oldDirection);}
+            added.addAll(requested);
+            if("active".equals(status)&&!added.isEmpty())insertAssignments(db,id,companyId,added,now,companyChanged?"Назначение после смены компании":"Новое назначение");
             audit(db,"employee.updated",id,oldName+" · "+oldCompany,fullName.trim()+" · "+companyId);db.setTransactionSuccessful();
         } finally {db.endTransaction();}
     }
