@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
+  pull_request:
 
 permissions:
   contents: read
@@ -30,6 +31,17 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
+
+      - name: Validate registry fixture and web modules
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check registry rules and browser scripts
+        run: |
+          node --check docs/registry/registry-core.js
+          node --check docs/registry/registry-ui.js
+          node scripts/validate-registry-seed.js
+          node scripts/test-registry-core.js
 
       - name: Install Android SDK packages and accept licenses
         shell: bash
