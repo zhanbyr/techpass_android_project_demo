@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#183d32">
+  <title>TechPass — реестр подрядчиков (демо)</title>
+  <link rel="stylesheet" href="./registry.css">
+</head>
+<body>
+  <header class="topbar">
+    <button id="menu-toggle" class="icon-button mobile-only" type="button" aria-label="Открыть меню">☰</button>
+    <a class="brand" href="./" aria-label="TechPass — реестр">
+      <span class="brand-mark">TP</span><span><strong>TechPass</strong><small>РЕЕСТР · ДЕМО</small></span>
+    </a>
+    <div class="topbar-spacer"></div>
+    <label class="role-picker"><span>Демо-роль</span><select id="role-select" aria-label="Выбрать демонстрационную роль">
+      <option value="IT_ADMIN">IT_ADMIN</option>
+      <option value="SECURITY_MANAGER">SECURITY_MANAGER</option>
+      <option value="TECHNICIAN">TECHNICIAN</option>
+      <option value="USER">USER</option>
+    </select></label>
+  </header>
+
+  <div class="demo-warning"><strong>Демонстрационная система</strong><span>Данные хранятся только в этом браузере. Роли и согласования не обеспечивают реальную защиту.</span></div>
+
+  <div class="shell">
+    <aside id="sidebar" class="sidebar" aria-label="Навигация реестра">
+      <div class="nav-caption">УПРАВЛЕНИЕ</div>
+      <button class="nav-item active" type="button" data-view="overview"><span>▦</span>Обзор</button>
+      <button class="nav-item" type="button" data-view="companies"><span>▤</span>Компании</button>
+      <button class="nav-item" type="button" data-view="employees"><span>♙</span>Специалисты</button>
+      <button class="nav-item" type="button" data-view="directions"><span>⌘</span>Направления</button>
+      <button class="nav-item" type="button" data-view="assignments"><span>⇄</span>Назначения</button>
+      <div class="nav-caption nav-caption-spaced">ИНСТРУМЕНТЫ</div>
+      <button class="nav-item" type="button" data-view="import"><span>⇧</span>Импорт Excel</button>
+      <button class="nav-item" type="button" data-view="scan"><span>▣</span>Сканирование QR</button>
+      <button class="nav-item" type="button" data-view="audit"><span>≡</span>Журнал событий</button>
+      <button class="nav-item" type="button" data-view="approvals"><span>✓</span>Согласования</button>
+      <div class="sidebar-footer"><a href="../">← К демонстрационным страницам</a></div>
+    </aside>
+
+    <main id="main-content" class="content" tabindex="-1"></main>
+  </div>
+  <div id="modal-root"></div>
+
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="./registry-core.js"></script>
+  <script src="./registry-ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,1471 @@
+{
+  "schemaVersion": 1,
+  "seedId": "techpass-contractor-registry-v1",
+  "demoOnly": true,
+  "generatedAt": "2026-10-30T09:00:00.000Z",
+  "directions": [
+    {
+      "id": "DIR-FACE",
+      "name": "Face ID",
+      "active": true
+    },
+    {
+      "id": "DIR-ACS",
+      "name": "СКУД",
+      "active": true
+    },
+    {
+      "id": "DIR-APS",
+      "name": "АПС",
+      "active": true
+    },
+    {
+      "id": "DIR-ASP",
+      "name": "АСПТ",
+      "active": true
+    },
+    {
+      "id": "DIR-CCTV",
+      "name": "СВН / видеонаблюдение",
+      "active": true
+    },
+    {
+      "id": "DIR-ALARM",
+      "name": "Тревожная сигнализация",
+      "active": true
+    }
+  ],
+  "companies": [
+    {
+      "id": "CTR-001",
+      "name": "К-Alarm",
+      "status": "active",
+      "allowedDirectionIds": [
+        "DIR-FACE",
+        "DIR-ACS"
+      ],
+      "maxDirections": 2,
+      "createdAt": "2026-10-30T09:00:00.000Z",
+      "updatedAt": "2026-10-30T09:00:00.000Z"
+    },
+    {
+      "id": "CTR-002",
+      "name": "OTIS",
+      "status": "active",
+      "allowedDirectionIds": [
+        "DIR-FACE",
+        "DIR-ACS"
+      ],
+      "maxDirections": 2,
+      "createdAt": "2026-10-30T09:00:00.000Z",
+      "updatedAt": "2026-10-30T09:00:00.000Z"
+    },
+    {
+      "id": "CTR-003",
+      "name": "ТЭ",
+      "status": "active",
+      "allowedDirectionIds": [
+        "DIR-FACE",
+        "DIR-ACS"
+      ],
+      "maxDirections": 2,
+      "createdAt": "2026-10-30T09:00:00.000Z",
+      "updatedAt": "2026-10-30T09:00:00.000Z"
+    },
+    {
+      "id": "CTR-004",
+      "name": "ОКТА",
+      "status": "active",
+      "allowedDirectionIds": [
+        "DIR-FACE",
+        "DIR-ACS"
+      ],
+      "maxDirections": 2,
+      "createdAt": "2026-10-30T09:00:00.000Z",
+      "updatedAt": "2026-10-30T09:00:00.000Z"
+    }
+  ],
+  "employees": [
+    {
+      "id": "EMP-000001",
+      "fullName": "Алан Мырзабеков",
+      "demoNumber": "347081970624",
+      "companyId": "CTR-001",
+      "status": "active",
+      "createdAt": "2026-09-10T09:00:00.000Z",
+      "updatedAt": "2026-09-10T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000002",
+      "fullName": "Айша Нурланова",
+      "demoNumber": "546838420168",
+      "companyId": "CTR-001",
+      "status": "active",
+      "createdAt": "2026-09-11T09:00:00.000Z",
+      "updatedAt": "2026-09-11T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000003",
+      "fullName": "Марат Беков",
+      "demoNumber": "248133777540",
+      "companyId": "CTR-001",
+      "status": "active",
+      "createdAt": "2026-09-12T09:00:00.000Z",
+      "updatedAt": "2026-09-12T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000004",
+      "fullName": "Дана Садыкова",
+      "demoNumber": "677038629568",
+      "companyId": "CTR-001",
+      "status": "active",
+      "createdAt": "2026-09-13T09:00:00.000Z",
+      "updatedAt": "2026-09-13T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000005",
+      "fullName": "Данияр Толеуов",
+      "demoNumber": "826507408308",
+      "companyId": "CTR-002",
+      "status": "active",
+      "createdAt": "2026-09-14T09:00:00.000Z",
+      "updatedAt": "2026-09-14T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000006",
+      "fullName": "София Ким",
+      "demoNumber": "837054308740",
+      "companyId": "CTR-002",
+      "status": "active",
+      "createdAt": "2026-09-15T09:00:00.000Z",
+      "updatedAt": "2026-09-15T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000007",
+      "fullName": "Ернар Жумабек",
+      "demoNumber": "101792670619",
+      "companyId": "CTR-002",
+      "status": "active",
+      "createdAt": "2026-09-16T09:00:00.000Z",
+      "updatedAt": "2026-09-16T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000008",
+      "fullName": "Лейла Аскарова",
+      "demoNumber": "893353520642",
+      "companyId": "CTR-002",
+      "status": "active",
+      "createdAt": "2026-09-17T09:00:00.000Z",
+      "updatedAt": "2026-09-17T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000009",
+      "fullName": "Нурлан Байжан",
+      "demoNumber": "159706463456",
+      "companyId": "CTR-003",
+      "status": "active",
+      "createdAt": "2026-09-18T09:00:00.000Z",
+      "updatedAt": "2026-09-18T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000010",
+      "fullName": "Мадина Каримова",
+      "demoNumber": "784443787414",
+      "companyId": "CTR-003",
+      "status": "active",
+      "createdAt": "2026-09-19T09:00:00.000Z",
+      "updatedAt": "2026-09-19T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000011",
+      "fullName": "Тимур Сейтахмет",
+      "demoNumber": "135587699533",
+      "companyId": "CTR-003",
+      "status": "active",
+      "createdAt": "2026-09-20T09:00:00.000Z",
+      "updatedAt": "2026-09-20T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000012",
+      "fullName": "Айгерим Досжан",
+      "demoNumber": "100357505042",
+      "companyId": "CTR-003",
+      "status": "active",
+      "createdAt": "2026-09-21T09:00:00.000Z",
+      "updatedAt": "2026-09-21T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000013",
+      "fullName": "Арман Сулеймен",
+      "demoNumber": "717307876391",
+      "companyId": "CTR-004",
+      "status": "active",
+      "createdAt": "2026-09-22T09:00:00.000Z",
+      "updatedAt": "2026-09-22T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000014",
+      "fullName": "Жания Омарова",
+      "demoNumber": "690430062519",
+      "companyId": "CTR-004",
+      "status": "active",
+      "createdAt": "2026-09-23T09:00:00.000Z",
+      "updatedAt": "2026-09-23T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000015",
+      "fullName": "Бекзат Турсын",
+      "demoNumber": "472016208983",
+      "companyId": "CTR-004",
+      "status": "active",
+      "createdAt": "2026-09-24T09:00:00.000Z",
+      "updatedAt": "2026-09-24T09:00:00.000Z",
+      "comments": []
+    },
+    {
+      "id": "EMP-000016",
+      "fullName": "Алиса Рахимова",
+      "demoNumber": "569217298749",
+      "companyId": "CTR-004",
+      "status": "active",
+      "createdAt": "2026-09-25T09:00:00.000Z",
+      "updatedAt": "2026-09-25T09:00:00.000Z",
+      "comments": []
+    }
+  ],
+  "assignments": [
+    {
+      "id": "ASN-000001",
+      "employeeId": "EMP-000001",
+      "companyId": "CTR-001",
+      "directionId": "DIR-FACE",
+      "startedAt": "2026-09-10T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000002",
+      "employeeId": "EMP-000002",
+      "companyId": "CTR-001",
+      "directionId": "DIR-ACS",
+      "startedAt": "2026-09-11T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000003",
+      "employeeId": "EMP-000003",
+      "companyId": "CTR-001",
+      "directionId": "DIR-FACE",
+      "startedAt": "2026-09-12T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000004",
+      "employeeId": "EMP-000003",
+      "companyId": "CTR-001",
+      "directionId": "DIR-ACS",
+      "startedAt": "2026-09-12T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000005",
+      "employeeId": "EMP-000004",
+      "companyId": "CTR-001",
+      "directionId": "DIR-FACE",
+      "startedAt": "2026-09-13T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000006",
+      "employeeId": "EMP-000004",
+      "companyId": "CTR-001",
+      "directionId": "DIR-ACS",
+      "startedAt": "2026-09-13T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000007",
+      "employeeId": "EMP-000005",
+      "companyId": "CTR-002",
+      "directionId": "DIR-ACS",
+      "startedAt": "2026-09-14T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000008",
+      "employeeId": "EMP-000006",
+      "companyId": "CTR-002",
+      "directionId": "DIR-FACE",
+      "startedAt": "2026-09-15T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000009",
+      "employeeId": "EMP-000007",
+      "companyId": "CTR-002",
+      "directionId": "DIR-FACE",
+      "startedAt": "2026-09-16T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000010",
+      "employeeId": "EMP-000007",
+      "companyId": "CTR-002",
+      "directionId": "DIR-ACS",
+      "startedAt": "2026-09-16T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000011",
+      "employeeId": "EMP-000008",
+      "companyId": "CTR-002",
+      "directionId": "DIR-ACS",
+      "startedAt": "2026-09-17T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000012",
+      "employeeId": "EMP-000008",
+      "companyId": "CTR-002",
+      "directionId": "DIR-FACE",
+      "startedAt": "2026-09-17T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000013",
+      "employeeId": "EMP-000009",
+      "companyId": "CTR-003",
+      "directionId": "DIR-FACE",
+      "startedAt": "2026-09-18T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000014",
+      "employeeId": "EMP-000010",
+      "companyId": "CTR-003",
+      "directionId": "DIR-ACS",
+      "startedAt": "2026-09-19T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000015",
+      "employeeId": "EMP-000011",
+      "companyId": "CTR-003",
+      "directionId": "DIR-FACE",
+      "startedAt": "2026-09-20T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000016",
+      "employeeId": "EMP-000011",
+      "companyId": "CTR-003",
+      "directionId": "DIR-ACS",
+      "startedAt": "2026-09-20T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000017",
+      "employeeId": "EMP-000012",
+      "companyId": "CTR-003",
+      "directionId": "DIR-FACE",
+      "startedAt": "2026-09-21T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000018",
+      "employeeId": "EMP-000012",
+      "companyId": "CTR-003",
+      "directionId": "DIR-ACS",
+      "startedAt": "2026-09-21T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000019",
+      "employeeId": "EMP-000013",
+      "companyId": "CTR-004",
+      "directionId": "DIR-ACS",
+      "startedAt": "2026-09-22T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000020",
+      "employeeId": "EMP-000014",
+      "companyId": "CTR-004",
+      "directionId": "DIR-FACE",
+      "startedAt": "2026-09-23T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000021",
+      "employeeId": "EMP-000015",
+      "companyId": "CTR-004",
+      "directionId": "DIR-FACE",
+      "startedAt": "2026-09-24T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000022",
+      "employeeId": "EMP-000015",
+      "companyId": "CTR-004",
+      "directionId": "DIR-ACS",
+      "startedAt": "2026-09-24T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000023",
+      "employeeId": "EMP-000016",
+      "companyId": "CTR-004",
+      "directionId": "DIR-ACS",
+      "startedAt": "2026-09-25T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    },
+    {
+      "id": "ASN-000024",
+      "employeeId": "EMP-000016",
+      "companyId": "CTR-004",
+      "directionId": "DIR-FACE",
+      "startedAt": "2026-09-25T09:00:00.000Z",
+      "endedAt": null,
+      "status": "active",
+      "comment": "Начальное демонстрационное назначение"
+    }
+  ],
+  "approvalRequests": [],
+  "auditEvents": [
+    {
+      "id": "EVT-000001",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "company.created",
+      "entityType": "company",
+      "entityId": "CTR-001",
+      "oldValue": null,
+      "newValue": {
+        "id": "CTR-001",
+        "name": "К-Alarm",
+        "status": "active",
+        "allowedDirectionIds": [
+          "DIR-FACE",
+          "DIR-ACS"
+        ],
+        "maxDirections": 2,
+        "createdAt": "2026-10-30T09:00:00.000Z",
+        "updatedAt": "2026-10-30T09:00:00.000Z"
+      }
+    },
+    {
+      "id": "EVT-000002",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "company.created",
+      "entityType": "company",
+      "entityId": "CTR-002",
+      "oldValue": null,
+      "newValue": {
+        "id": "CTR-002",
+        "name": "OTIS",
+        "status": "active",
+        "allowedDirectionIds": [
+          "DIR-FACE",
+          "DIR-ACS"
+        ],
+        "maxDirections": 2,
+        "createdAt": "2026-10-30T09:00:00.000Z",
+        "updatedAt": "2026-10-30T09:00:00.000Z"
+      }
+    },
+    {
+      "id": "EVT-000003",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "company.created",
+      "entityType": "company",
+      "entityId": "CTR-003",
+      "oldValue": null,
+      "newValue": {
+        "id": "CTR-003",
+        "name": "ТЭ",
+        "status": "active",
+        "allowedDirectionIds": [
+          "DIR-FACE",
+          "DIR-ACS"
+        ],
+        "maxDirections": 2,
+        "createdAt": "2026-10-30T09:00:00.000Z",
+        "updatedAt": "2026-10-30T09:00:00.000Z"
+      }
+    },
+    {
+      "id": "EVT-000004",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "company.created",
+      "entityType": "company",
+      "entityId": "CTR-004",
+      "oldValue": null,
+      "newValue": {
+        "id": "CTR-004",
+        "name": "ОКТА",
+        "status": "active",
+        "allowedDirectionIds": [
+          "DIR-FACE",
+          "DIR-ACS"
+        ],
+        "maxDirections": 2,
+        "createdAt": "2026-10-30T09:00:00.000Z",
+        "updatedAt": "2026-10-30T09:00:00.000Z"
+      }
+    },
+    {
+      "id": "EVT-000005",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000001",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000001",
+        "fullName": "Алан Мырзабеков",
+        "demoNumber": "347081970624",
+        "companyId": "CTR-001",
+        "status": "active",
+        "createdAt": "2026-09-10T09:00:00.000Z",
+        "updatedAt": "2026-09-10T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000006",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000001",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000001",
+        "employeeId": "EMP-000001",
+        "companyId": "CTR-001",
+        "directionId": "DIR-FACE",
+        "startedAt": "2026-09-10T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000007",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000002",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000002",
+        "fullName": "Айша Нурланова",
+        "demoNumber": "546838420168",
+        "companyId": "CTR-001",
+        "status": "active",
+        "createdAt": "2026-09-11T09:00:00.000Z",
+        "updatedAt": "2026-09-11T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000008",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000002",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000002",
+        "employeeId": "EMP-000002",
+        "companyId": "CTR-001",
+        "directionId": "DIR-ACS",
+        "startedAt": "2026-09-11T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000009",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000003",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000003",
+        "fullName": "Марат Беков",
+        "demoNumber": "248133777540",
+        "companyId": "CTR-001",
+        "status": "active",
+        "createdAt": "2026-09-12T09:00:00.000Z",
+        "updatedAt": "2026-09-12T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000010",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000003",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000003",
+        "employeeId": "EMP-000003",
+        "companyId": "CTR-001",
+        "directionId": "DIR-FACE",
+        "startedAt": "2026-09-12T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000011",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000004",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000004",
+        "employeeId": "EMP-000003",
+        "companyId": "CTR-001",
+        "directionId": "DIR-ACS",
+        "startedAt": "2026-09-12T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000012",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000004",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000004",
+        "fullName": "Дана Садыкова",
+        "demoNumber": "677038629568",
+        "companyId": "CTR-001",
+        "status": "active",
+        "createdAt": "2026-09-13T09:00:00.000Z",
+        "updatedAt": "2026-09-13T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000013",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000005",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000005",
+        "employeeId": "EMP-000004",
+        "companyId": "CTR-001",
+        "directionId": "DIR-FACE",
+        "startedAt": "2026-09-13T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000014",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000006",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000006",
+        "employeeId": "EMP-000004",
+        "companyId": "CTR-001",
+        "directionId": "DIR-ACS",
+        "startedAt": "2026-09-13T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000015",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000005",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000005",
+        "fullName": "Данияр Толеуов",
+        "demoNumber": "826507408308",
+        "companyId": "CTR-002",
+        "status": "active",
+        "createdAt": "2026-09-14T09:00:00.000Z",
+        "updatedAt": "2026-09-14T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000016",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000007",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000007",
+        "employeeId": "EMP-000005",
+        "companyId": "CTR-002",
+        "directionId": "DIR-ACS",
+        "startedAt": "2026-09-14T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000017",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000006",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000006",
+        "fullName": "София Ким",
+        "demoNumber": "837054308740",
+        "companyId": "CTR-002",
+        "status": "active",
+        "createdAt": "2026-09-15T09:00:00.000Z",
+        "updatedAt": "2026-09-15T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000018",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000008",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000008",
+        "employeeId": "EMP-000006",
+        "companyId": "CTR-002",
+        "directionId": "DIR-FACE",
+        "startedAt": "2026-09-15T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000019",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000007",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000007",
+        "fullName": "Ернар Жумабек",
+        "demoNumber": "101792670619",
+        "companyId": "CTR-002",
+        "status": "active",
+        "createdAt": "2026-09-16T09:00:00.000Z",
+        "updatedAt": "2026-09-16T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000020",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000009",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000009",
+        "employeeId": "EMP-000007",
+        "companyId": "CTR-002",
+        "directionId": "DIR-FACE",
+        "startedAt": "2026-09-16T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000021",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000010",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000010",
+        "employeeId": "EMP-000007",
+        "companyId": "CTR-002",
+        "directionId": "DIR-ACS",
+        "startedAt": "2026-09-16T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000022",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000008",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000008",
+        "fullName": "Лейла Аскарова",
+        "demoNumber": "893353520642",
+        "companyId": "CTR-002",
+        "status": "active",
+        "createdAt": "2026-09-17T09:00:00.000Z",
+        "updatedAt": "2026-09-17T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000023",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000011",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000011",
+        "employeeId": "EMP-000008",
+        "companyId": "CTR-002",
+        "directionId": "DIR-ACS",
+        "startedAt": "2026-09-17T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000024",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000012",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000012",
+        "employeeId": "EMP-000008",
+        "companyId": "CTR-002",
+        "directionId": "DIR-FACE",
+        "startedAt": "2026-09-17T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000025",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000009",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000009",
+        "fullName": "Нурлан Байжан",
+        "demoNumber": "159706463456",
+        "companyId": "CTR-003",
+        "status": "active",
+        "createdAt": "2026-09-18T09:00:00.000Z",
+        "updatedAt": "2026-09-18T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000026",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000013",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000013",
+        "employeeId": "EMP-000009",
+        "companyId": "CTR-003",
+        "directionId": "DIR-FACE",
+        "startedAt": "2026-09-18T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000027",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000010",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000010",
+        "fullName": "Мадина Каримова",
+        "demoNumber": "784443787414",
+        "companyId": "CTR-003",
+        "status": "active",
+        "createdAt": "2026-09-19T09:00:00.000Z",
+        "updatedAt": "2026-09-19T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000028",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000014",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000014",
+        "employeeId": "EMP-000010",
+        "companyId": "CTR-003",
+        "directionId": "DIR-ACS",
+        "startedAt": "2026-09-19T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000029",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000011",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000011",
+        "fullName": "Тимур Сейтахмет",
+        "demoNumber": "135587699533",
+        "companyId": "CTR-003",
+        "status": "active",
+        "createdAt": "2026-09-20T09:00:00.000Z",
+        "updatedAt": "2026-09-20T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000030",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000015",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000015",
+        "employeeId": "EMP-000011",
+        "companyId": "CTR-003",
+        "directionId": "DIR-FACE",
+        "startedAt": "2026-09-20T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000031",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000016",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000016",
+        "employeeId": "EMP-000011",
+        "companyId": "CTR-003",
+        "directionId": "DIR-ACS",
+        "startedAt": "2026-09-20T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000032",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000012",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000012",
+        "fullName": "Айгерим Досжан",
+        "demoNumber": "100357505042",
+        "companyId": "CTR-003",
+        "status": "active",
+        "createdAt": "2026-09-21T09:00:00.000Z",
+        "updatedAt": "2026-09-21T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000033",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000017",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000017",
+        "employeeId": "EMP-000012",
+        "companyId": "CTR-003",
+        "directionId": "DIR-FACE",
+        "startedAt": "2026-09-21T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000034",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000018",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000018",
+        "employeeId": "EMP-000012",
+        "companyId": "CTR-003",
+        "directionId": "DIR-ACS",
+        "startedAt": "2026-09-21T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000035",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000013",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000013",
+        "fullName": "Арман Сулеймен",
+        "demoNumber": "717307876391",
+        "companyId": "CTR-004",
+        "status": "active",
+        "createdAt": "2026-09-22T09:00:00.000Z",
+        "updatedAt": "2026-09-22T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000036",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000019",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000019",
+        "employeeId": "EMP-000013",
+        "companyId": "CTR-004",
+        "directionId": "DIR-ACS",
+        "startedAt": "2026-09-22T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000037",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000014",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000014",
+        "fullName": "Жания Омарова",
+        "demoNumber": "690430062519",
+        "companyId": "CTR-004",
+        "status": "active",
+        "createdAt": "2026-09-23T09:00:00.000Z",
+        "updatedAt": "2026-09-23T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000038",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000020",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000020",
+        "employeeId": "EMP-000014",
+        "companyId": "CTR-004",
+        "directionId": "DIR-FACE",
+        "startedAt": "2026-09-23T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000039",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000015",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000015",
+        "fullName": "Бекзат Турсын",
+        "demoNumber": "472016208983",
+        "companyId": "CTR-004",
+        "status": "active",
+        "createdAt": "2026-09-24T09:00:00.000Z",
+        "updatedAt": "2026-09-24T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000040",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000021",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000021",
+        "employeeId": "EMP-000015",
+        "companyId": "CTR-004",
+        "directionId": "DIR-FACE",
+        "startedAt": "2026-09-24T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000041",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000022",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000022",
+        "employeeId": "EMP-000015",
+        "companyId": "CTR-004",
+        "directionId": "DIR-ACS",
+        "startedAt": "2026-09-24T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000042",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "employee.created",
+      "entityType": "employee",
+      "entityId": "EMP-000016",
+      "oldValue": null,
+      "newValue": {
+        "id": "EMP-000016",
+        "fullName": "Алиса Рахимова",
+        "demoNumber": "569217298749",
+        "companyId": "CTR-004",
+        "status": "active",
+        "createdAt": "2026-09-25T09:00:00.000Z",
+        "updatedAt": "2026-09-25T09:00:00.000Z",
+        "comments": []
+      }
+    },
+    {
+      "id": "EVT-000043",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000023",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000023",
+        "employeeId": "EMP-000016",
+        "companyId": "CTR-004",
+        "directionId": "DIR-ACS",
+        "startedAt": "2026-09-25T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    },
+    {
+      "id": "EVT-000044",
+      "occurredAt": "2026-10-30T09:00:00.000Z",
+      "actor": {
+        "id": "SEED",
+        "role": "SYSTEM"
+      },
+      "type": "assignment.created",
+      "entityType": "assignment",
+      "entityId": "ASN-000024",
+      "oldValue": null,
+      "newValue": {
+        "id": "ASN-000024",
+        "employeeId": "EMP-000016",
+        "companyId": "CTR-004",
+        "directionId": "DIR-FACE",
+        "startedAt": "2026-09-25T09:00:00.000Z",
+        "endedAt": null,
+        "status": "active",
+        "comment": "Начальное демонстрационное назначение"
+      }
+    }
+  ]
+}
