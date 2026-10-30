@@ -163,7 +163,7 @@ final class RegistryDbHelper extends SQLiteOpenHelper {
             if (!current.moveToFirst()) throw new IllegalArgumentException("Сотрудник не найден.");
             boolean wasActive = "active".equals(current.getString(0)); current.close(); if (wasActive == active) { db.setTransactionSuccessful(); return; }
             ContentValues employee = new ContentValues(); employee.put("status", active ? "active" : "inactive"); db.update("employees", employee, "id=?", new String[]{id});
-            Cursor active=db.rawQuery("SELECT id,company_id,direction_id FROM assignments WHERE employee_id=? AND status='active'",new String[]{id});List<String[]> closedAssignments=new java.util.ArrayList<>();while(active.moveToNext())closedAssignments.add(new String[]{active.getString(0),active.getString(1),active.getString(2)});active.close();
+            Cursor activeAssignmentsCursor=db.rawQuery("SELECT id,company_id,direction_id FROM assignments WHERE employee_id=? AND status='active'",new String[]{id});List<String[]> closedAssignments=new java.util.ArrayList<>();while(activeAssignmentsCursor.moveToNext())closedAssignments.add(new String[]{activeAssignmentsCursor.getString(0),activeAssignmentsCursor.getString(1),activeAssignmentsCursor.getString(2)});activeAssignmentsCursor.close();
             ContentValues assignment = new ContentValues(); assignment.put("status", "closed"); assignment.put("ended_at", now); db.update("assignments", assignment, "employee_id=? AND status='active'", new String[]{id});
             for(String[] closed:closedAssignments)audit(db,"assignment.closed",closed[0],"active · "+closed[1]+" · "+closed[2],"closed · "+now);
             if (active) {
