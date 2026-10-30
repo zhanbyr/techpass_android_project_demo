@@ -23,6 +23,7 @@ import java.util.Set;
 final class RegistryDbHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "techpass_registry.db";
     private final Context context;
+    static final class ImportRow { final String fullName,companyId,demoNumber,status; final List<String> directionIds; ImportRow(String name,String company,List<String> directions,String number,String state){fullName=name;companyId=company;directionIds=directions;demoNumber=number;status=state;} }
     RegistryDbHelper(Context context) { super(context, DB_NAME, null, 1); this.context = context.getApplicationContext(); }
 
     @Override public void onCreate(SQLiteDatabase db) {
@@ -76,6 +77,10 @@ final class RegistryDbHelper extends SQLiteOpenHelper {
     synchronized void decideApproval(long requestId,boolean approve,String actor,String comment){SQLiteDatabase db=getWritableDatabase();Cursor c=db.rawQuery("SELECT requested_by,status FROM approvals WHERE id=?",new String[]{String.valueOf(requestId)});if(!c.moveToFirst()){c.close();throw new IllegalArgumentException("Запрос не найден.");}String requestedBy=c.getString(0),status=c.getString(1);c.close();if(!"pending".equals(status))throw new IllegalArgumentException("Запрос уже рассмотрен.");if(requestedBy.equals(actor))throw new IllegalArgumentException("Инициатор не может согласовать собственный запрос.");ContentValues v=new ContentValues();v.put("status",approve?"approved":"rejected");v.put("reviewed_by",actor);v.put("decided_at",timestamp());v.put("comment",comment==null?"":comment.trim());db.update("approvals",v,"id=?",new String[]{String.valueOf(requestId)});audit(db,"approval."+(approve?"approved":"rejected"),String.valueOf(requestId),"pending",approve?"approved":"rejected");}
 
     synchronized String createEmployee(String fullName, String companyId, List<String> directionIds) {
+        return createEmployee(fullName, companyId, directionIds, null);
+    }
+
+    synchronized String createEmployee(String fullName, String companyId, List<String> directionIds, String requestedDemoNumber) {
         if (fullName == null || fullName.trim().length() < 3) throw new IllegalArgumentException("Укажите ФИО.");
         SQLiteDatabase db = getWritableDatabase(); db.beginTransaction();
         try {
@@ -85,12 +90,17 @@ final class RegistryDbHelper extends SQLiteOpenHelper {
             if (!"active".equals(companyStatus)) throw new IllegalArgumentException("Компания неактивна.");
             validateDirections(allowed, max, directionIds);
             Cursor maxId = db.rawQuery("SELECT MAX(CAST(SUBSTR(id,5) AS INTEGER)) FROM employees", null); int number = maxId.moveToFirst() ? maxId.getInt(0) + 1 : 1; maxId.close();
-            String id = String.format(Locale.US, "EMP-%06d", number); String demo = uniqueNumber(db); String now = timestamp();
+            String id = String.format(Locale.US, "EMP-%06d", number); String demo = requestedDemoNumber == null || requestedDemoNumber.trim().isEmpty() ? uniqueNumber(db) : requestedDemoNumber.trim();
+            if(!demo.matches("\\d{12}"))throw new IllegalArgumentException("Демо-номер должен содержать ровно 12 цифр.");
+            Cursor duplicate=db.rawQuery("SELECT COUNT(*) FROM employees WHERE demo_number=?",new String[]{demo});boolean alreadyUsed=duplicate.moveToFirst()&&duplicate.getInt(0)>0;duplicate.close();if(alreadyUsed)throw new IllegalArgumentException("Демо-номер уже используется.");
+            String now = timestamp();
             ContentValues e = new ContentValues(); e.put("id", id); e.put("full_name", fullName.trim().replaceAll("\\s+", " ")); e.put("demo_number", demo); e.put("company_id", companyId); e.put("status", "active"); e.put("created_at", now); db.insertOrThrow("employees", null, e);
             insertAssignments(db,id,companyId,directionIds,now,"Начальное назначение");
             audit(db, "employee.created", id, null, fullName.trim()); db.setTransactionSuccessful(); return id;
         } finally { db.endTransaction(); }
     }
+
+    synchronized List<String> importEmployees(List<ImportRow> rows,String fileName,int rejected){SQLiteDatabase db=getWritableDatabase();List<String> added=new java.util.ArrayList<>();db.beginTransaction();try{for(ImportRow row:rows){String id=createEmployee(row.fullName,row.companyId,row.directionIds,row.demoNumber);if("inactive".equals(row.status))setEmployeeStatus(id,false);added.add(id);}audit(db,"import.completed","registry",null,(fileName==null?"Excel":fileName)+" · добавлено "+added.size()+" · отклонено "+rejected);db.setTransactionSuccessful();return added;}finally{db.endTransaction();}}
 
     synchronized void updateEmployee(String id,String fullName,String companyId,List<String> directionIds) {
         if(fullName==null||fullName.trim().length()<3)throw new IllegalArgumentException("Укажите ФИО.");
