@@ -24,20 +24,27 @@ import java.util.Set;
 final class RegistryDbHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "techpass_registry.db";
     private final Context context;
+    private String auditActor = "SYSTEM";
     static final class ImportRow { final String fullName,companyId,demoNumber,status; final List<String> directionIds; ImportRow(String name,String company,List<String> directions,String number,String state){fullName=name;companyId=company;directionIds=directions;demoNumber=number;status=state;} }
-    RegistryDbHelper(Context context) { super(context, DB_NAME, null, 1); this.context = context.getApplicationContext(); }
+    RegistryDbHelper(Context context) { super(context, DB_NAME, null, 2); this.context = context.getApplicationContext(); }
 
     @Override public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE companies(id TEXT PRIMARY KEY,name TEXT NOT NULL,status TEXT NOT NULL,allowed TEXT NOT NULL,max_directions INTEGER NOT NULL)");
         db.execSQL("CREATE TABLE directions(id TEXT PRIMARY KEY,name TEXT NOT NULL,active INTEGER NOT NULL)");
         db.execSQL("CREATE TABLE employees(id TEXT PRIMARY KEY,full_name TEXT NOT NULL,demo_number TEXT UNIQUE NOT NULL,company_id TEXT NOT NULL REFERENCES companies(id),status TEXT NOT NULL,created_at TEXT NOT NULL,comments TEXT NOT NULL DEFAULT '')");
         db.execSQL("CREATE TABLE assignments(id TEXT PRIMARY KEY,employee_id TEXT NOT NULL REFERENCES employees(id),company_id TEXT NOT NULL REFERENCES companies(id),direction_id TEXT NOT NULL REFERENCES directions(id),started_at TEXT NOT NULL,ended_at TEXT,status TEXT NOT NULL,comment TEXT NOT NULL DEFAULT '')");
-        db.execSQL("CREATE TABLE audit_events(id INTEGER PRIMARY KEY AUTOINCREMENT,occurred_at TEXT NOT NULL,event_type TEXT NOT NULL,entity_id TEXT NOT NULL,old_value TEXT,new_value TEXT)");
+        db.execSQL("CREATE TABLE audit_events(id INTEGER PRIMARY KEY AUTOINCREMENT,occurred_at TEXT NOT NULL,actor_id TEXT NOT NULL DEFAULT 'SYSTEM',event_type TEXT NOT NULL,entity_id TEXT NOT NULL,old_value TEXT,new_value TEXT)");
         db.execSQL("CREATE TABLE approvals(id INTEGER PRIMARY KEY AUTOINCREMENT,employee_id TEXT NOT NULL,requested_by TEXT NOT NULL,request_text TEXT NOT NULL,status TEXT NOT NULL,reviewed_by TEXT,created_at TEXT NOT NULL,decided_at TEXT,comment TEXT NOT NULL DEFAULT '')");
         loadSeed(db);
     }
 
-    @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { }
+    @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 2) db.execSQL("ALTER TABLE audit_events ADD COLUMN actor_id TEXT NOT NULL DEFAULT 'SYSTEM'");
+    }
+
+    synchronized void setAuditActor(String actorId) {
+        auditActor = actorId == null || actorId.trim().isEmpty() ? "SYSTEM" : actorId.trim();
+    }
 
     private void loadSeed(SQLiteDatabase db) {
         try (InputStream input = context.getAssets().open("registry-seed.json"); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
@@ -174,5 +181,5 @@ final class RegistryDbHelper extends SQLiteOpenHelper {
     private Set<String> allowedSet(String value) { Set<String> result = new HashSet<>(); for (String item : value.split(",")) result.add(item); return result; }
     private String joinStrings(List<String> values){StringBuilder out=new StringBuilder();for(String value:values){if(out.length()>0)out.append(',');out.append(value);}return out.toString();}
     private String timestamp() { SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.US);f.setTimeZone(TimeZone.getTimeZone("UTC"));return f.format(new Date()); }
-    private void audit(SQLiteDatabase db, String type, String entity, String oldValue, String newValue) { ContentValues v = new ContentValues(); v.put("occurred_at", timestamp()); v.put("event_type", type); v.put("entity_id", entity); v.put("old_value", oldValue); v.put("new_value", newValue); db.insert("audit_events", null, v); }
+    private void audit(SQLiteDatabase db, String type, String entity, String oldValue, String newValue) { ContentValues v = new ContentValues(); v.put("occurred_at", timestamp()); v.put("actor_id", auditActor); v.put("event_type", type); v.put("entity_id", entity); v.put("old_value", oldValue); v.put("new_value", newValue); db.insert("audit_events", null, v); }
 }
