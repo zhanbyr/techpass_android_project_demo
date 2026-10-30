@@ -357,17 +357,13 @@
         };
         const actor = role();
         const timestamp = now();
+        const working = core.clone(state);
         if (!editing) {
-          core.createEmployee(state, changes, actor, timestamp);
+          core.createEmployee(working, changes, actor, timestamp);
         } else {
-          const oldCompanyId = item.companyId;
-          const oldStatus = item.status;
-          core.updateEmployee(state, item.id, { fullName: changes.fullName, demoNumber: changes.demoNumber, comment: changes.comment }, actor, timestamp);
-          if (oldStatus === "active" && changes.status === "inactive") core.setEmployeeStatus(state, item.id, "inactive", [], actor, timestamp);
-          if (oldCompanyId !== changes.companyId) core.changeEmployeeCompany(state, item.id, changes.companyId, changes.directionIds, actor, timestamp);
-          if (oldStatus === "inactive" && changes.status === "active") core.setEmployeeStatus(state, item.id, "active", changes.directionIds, actor, timestamp);
-          else if (oldStatus === "active" && changes.status === "active" && oldCompanyId === changes.companyId) core.setEmployeeDirections(state, item.id, changes.directionIds, actor, timestamp);
+          core.updateEmployeeProfile(working, item.id, changes, actor, timestamp);
         }
+        state = working;
         save();
         closeModal();
         showToast(editing ? "Профиль сохранён." : "Сотрудник добавлен.");
@@ -617,7 +613,7 @@
   }
 
   function mapDirectionCell(value) {
-    const tokens = String(value || "").split(/[;,|/]+/).map((part) => part.trim().toLocaleLowerCase()).filter(Boolean);
+    const tokens = String(value || "").split(/[;,|\n]+/).map((part) => part.trim().toLocaleLowerCase()).filter(Boolean);
     const results = [];
     for (const token of tokens) {
       const found = state.directions.find((item) => item.id.toLocaleLowerCase() === token || item.name.toLocaleLowerCase() === token);

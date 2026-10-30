@@ -58,6 +58,14 @@ assert.equal(store.assignments.filter((item) => item.employeeId === added.id).le
 const extension = core.createDirection(store, "Инженерия демо", admin, fixedTime);
 assert.match(extension.id, /^DIR-EXT-\d{6}$/);
 assert.throws(() => core.createEmployee(store, { fullName: "Ограниченный тест", companyId: "CTR-001", directionIds: [extension.id] }, admin, fixedTime), /не может назначать/);
+const unchangedName = store.employees.find((item) => item.id === added.id).fullName;
+const unchangedAssignments = core.clone(store.assignments.filter((item) => item.employeeId === added.id));
+assert.throws(() => core.updateEmployeeProfile(store, added.id, { fullName: "Не должно сохраниться", companyId: "CTR-002", directionIds: ["DIR-CCTV"], status: "active" }, admin, fixedTime), /не может назначать/);
+assert.equal(store.employees.find((item) => item.id === added.id).fullName, unchangedName, "failed profile edits must not partially mutate the store");
+assert.deepEqual(store.assignments.filter((item) => item.employeeId === added.id), unchangedAssignments, "failed profile edits must preserve assignment history");
+const futureCompany = core.createCompany(store, { name: "Будущая демо-компания", allowedDirectionIds: ["DIR-APS", extension.id], maxDirections: 2 }, admin, fixedTime);
+assert.equal(futureCompany.id, "CTR-005", "company ID format must remain CTR-NNN");
+core.createEmployee(store, { fullName: "Тест дополнительных направлений", companyId: futureCompany.id, directionIds: ["DIR-APS", extension.id] }, admin, fixedTime);
 assert.deepEqual(core.assertStoreInvariants(store), []);
 
 const approval = core.requestApproval(store, originalEmployeeId, "Запрос на специальный просмотр журнала", admin, fixedTime);

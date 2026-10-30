@@ -288,7 +288,7 @@
     const maxDirections = Number(input.maxDirections || 3);
     if (!Number.isInteger(maxDirections) || maxDirections < 1 || maxDirections > allowedDirectionIds.length) throw new Error("Максимум направлений должен соответствовать списку разрешённых направлений.");
     const company = {
-      id: nextId(store, "company", "CTR", store.companies),
+      id: `CTR-${String(nextSequence(store, "company", "CTR", store.companies)).padStart(3, "0")}`,
       name,
       status: "active",
       allowedDirectionIds,
@@ -334,6 +334,28 @@
     createAssignments(store, employee, selected, actor, now, "Назначение при повторной активации");
     addAuditEvent(store, actor, "employee.status.changed", "employee", employee.id, oldStatus, "active", now);
     return employee;
+  }
+
+  function updateEmployeeProfile(store, employeeId, changes, actor, now = new Date().toISOString()) {
+    requireActor(actor, ["IT_ADMIN"]);
+    const working = clone(store);
+    const employee = getEmployee(working, employeeId);
+    const oldCompanyId = employee.companyId;
+    const oldStatus = employee.status;
+    updateEmployee(working, employeeId, {
+      fullName: changes.fullName,
+      demoNumber: changes.demoNumber,
+      comment: changes.comment,
+    }, actor, now);
+    if (oldStatus === "active" && changes.status === "inactive") setEmployeeStatus(working, employeeId, "inactive", [], actor, now);
+    if (oldCompanyId !== changes.companyId) changeEmployeeCompany(working, employeeId, changes.companyId, changes.directionIds, actor, now);
+    if (oldStatus === "inactive" && changes.status === "active") setEmployeeStatus(working, employeeId, "active", changes.directionIds, actor, now);
+    else if (oldStatus === "active" && changes.status === "active" && oldCompanyId === changes.companyId) setEmployeeDirections(working, employeeId, changes.directionIds, actor, now);
+    const errors = assertStoreInvariants(working);
+    if (errors.length) throw new Error(`Изменения нарушают правила реестра: ${errors.join("; ")}`);
+    for (const key of Object.keys(store)) if (!Object.hasOwn(working, key)) delete store[key];
+    Object.assign(store, working);
+    return getEmployee(store, employeeId);
   }
 
   function updateCompany(store, companyId, changes, actor, now = new Date().toISOString()) {
@@ -482,6 +504,7 @@
     createDirection,
     updateCompany,
     setEmployeeStatus,
+    updateEmployeeProfile,
     searchEmployees,
     requestApproval,
     decideApproval,
