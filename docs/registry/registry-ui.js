@@ -376,7 +376,7 @@
   function companyForm(item = null) {
     if (!isAdmin()) return;
     const editing = Boolean(item);
-    const locked = item && Object.hasOwn(core.DEMO_COMPANY_POLICIES, item.id);
+    const locked = item && Object.prototype.hasOwnProperty.call(core.DEMO_COMPANY_POLICIES, item.id);
     const name = item?.name || "";
     const directionInputs = state.directions.map((directionItem) => {
       const allowed = item?.allowedDirectionIds || ["DIR-FACE", "DIR-ACS"];
@@ -684,7 +684,7 @@
     if (!imported) return;
     state = importPreview.staging;
     const actor = role();
-    const eventId = `EVT-${String(Math.max(0, ...state.auditEvents.map((item) => Number(item.id.split("-").at(-1)) || 0)) + 1).padStart(6, "0")}`;
+    const eventId = `EVT-${String(Math.max(0, ...state.auditEvents.map((item) => { const parts = item.id.split("-"); return Number(parts[parts.length - 1]) || 0; })) + 1).padStart(6, "0")}`;
     state.auditEvents.push({ id: eventId, occurredAt: now(), actor: { id: actor.id, role: actor.role }, type: "import.completed", entityType: "import", entityId: eventId, oldValue: null, newValue: { fileName: importPreview.fileName, inserted: imported, rejected: importPreview.results.length - imported } });
     save(); importPreview = null; workbookRows = null; currentView = "employees"; render(); showToast(`Импорт завершён: добавлено ${imported}.`);
   }

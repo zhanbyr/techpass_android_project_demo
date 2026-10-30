@@ -353,7 +353,7 @@
     else if (oldStatus === "active" && changes.status === "active" && oldCompanyId === changes.companyId) setEmployeeDirections(working, employeeId, changes.directionIds, actor, now);
     const errors = assertStoreInvariants(working);
     if (errors.length) throw new Error(`Изменения нарушают правила реестра: ${errors.join("; ")}`);
-    for (const key of Object.keys(store)) if (!Object.hasOwn(working, key)) delete store[key];
+    for (const key of Object.keys(store)) if (!Object.prototype.hasOwnProperty.call(working, key)) delete store[key];
     Object.assign(store, working);
     return getEmployee(store, employeeId);
   }

@@ -3,6 +3,7 @@ package kz.techpass.demo;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -59,19 +60,38 @@ final class RegistryDbHelper extends SQLiteOpenHelper {
     private String join(JSONArray array) throws Exception { StringBuilder out = new StringBuilder(); for (int i = 0; i < array.length(); i++) { if (i > 0) out.append(','); out.append(array.getString(i)); } return out.toString(); }
 
     Cursor employees(String query) {
-        String needle = "%" + (query == null ? "" : query.trim()) + "%";
-        return getReadableDatabase().rawQuery("SELECT e.id,e.full_name,e.demo_number,e.company_id,e.status,c.name " +
-                "FROM employees e JOIN companies c ON c.id=e.company_id WHERE e.full_name LIKE ? OR e.id LIKE ? OR e.demo_number LIKE ? OR c.name LIKE ? " +
-                "OR EXISTS(SELECT 1 FROM assignments a JOIN directions d ON d.id=a.direction_id WHERE a.employee_id=e.id AND (d.name LIKE ? OR a.direction_id LIKE ?)) ORDER BY e.full_name",
-                new String[]{needle,needle,needle,needle,needle,needle});
+        String needle = query == null ? "" : query.trim().toLowerCase(Locale.ROOT);
+        SQLiteDatabase db=getReadableDatabase();Cursor source=db.rawQuery("SELECT e.id,e.full_name,e.demo_number,e.company_id,e.status,c.name FROM employees e JOIN companies c ON c.id=e.company_id ORDER BY e.full_name",null);
+        MatrixCursor result=new MatrixCursor(new String[]{"id","full_name","demo_number","company_id","status","company_name"});
+        while(source.moveToNext()){
+            String id=source.getString(0),name=source.getString(1),number=source.getString(2),companyId=source.getString(3),status=source.getString(4),companyName=source.getString(5);
+            StringBuilder haystack=new StringBuilder(name).append(' ').append(id).append(' ').append(number).append(' ').append(companyName);
+            Cursor history=db.rawQuery("SELECT d.name,a.direction_id,c.name FROM assignments a JOIN directions d ON d.id=a.direction_id JOIN companies c ON c.id=a.company_id WHERE a.employee_id=?",new String[]{id});while(history.moveToNext())haystack.append(' ').append(history.getString(0)).append(' ').append(history.getString(1)).append(' ').append(history.getString(2));history.close();
+            if(needle.isEmpty()||haystack.toString().toLowerCase(Locale.ROOT).contains(needle))result.addRow(new Object[]{id,name,number,companyId,status,companyName});
+        }
+        source.close();return result;
     }
+
+    String findCompanyId(String value){Cursor c=getReadableDatabase().rawQuery("SELECT id,name FROM companies",null);String found=null;while(c.moveToNext()){if(c.getString(0).equalsIgnoreCase(value)||c.getString(1).equalsIgnoreCase(value)){found=c.getString(0);break;}}c.close();return found;}
+    String directionIdForName(String value){Cursor c=getReadableDatabase().rawQuery("SELECT id,name FROM directions WHERE active=1",null);String found=null;while(c.moveToNext()){if(c.getString(0).equalsIgnoreCase(value)||c.getString(1).equalsIgnoreCase(value)){found=c.getString(0);break;}}c.close();return found;}
+    boolean employeeNameExistsInCompany(String name,String companyId){Cursor c=getReadableDatabase().rawQuery("SELECT full_name FROM employees WHERE company_id=?",new String[]{companyId});boolean found=false;while(c.moveToNext())if(c.getString(0).equalsIgnoreCase(name)){found=true;break;}c.close();return found;}
+    boolean demoNumberExists(String value){Cursor c=getReadableDatabase().rawQuery("SELECT 1 FROM employees WHERE demo_number=? LIMIT 1",new String[]{value});boolean found=c.moveToFirst();c.close();return found;}
+    boolean companyNameExists(String value){Cursor c=getReadableDatabase().rawQuery("SELECT name FROM companies",null);boolean found=false;while(c.moveToNext())if(c.getString(0).equalsIgnoreCase(value)){found=true;break;}c.close();return found;}
 
     Cursor employee(String id) { return getReadableDatabase().rawQuery("SELECT e.id,e.full_name,e.demo_number,e.company_id,e.status,e.created_at,e.comments,c.name FROM employees e JOIN companies c ON c.id=e.company_id WHERE e.id=?", new String[]{id}); }
     Cursor assignments(String employeeId) { return getReadableDatabase().rawQuery("SELECT a.id,c.name,d.name,a.started_at,a.ended_at,a.status,a.comment FROM assignments a JOIN companies c ON c.id=a.company_id JOIN directions d ON d.id=a.direction_id WHERE a.employee_id=? ORDER BY a.started_at DESC", new String[]{employeeId}); }
     Cursor companies() { return getReadableDatabase().rawQuery("SELECT id,name,allowed,max_directions,status FROM companies ORDER BY name", null); }
     Cursor directions() { return getReadableDatabase().rawQuery("SELECT id,name,active FROM directions ORDER BY name", null); }
-    synchronized void createDirection(String name){if(name==null||name.trim().length()<2)throw new IllegalArgumentException("Укажите название направления.");SQLiteDatabase db=getWritableDatabase();Cursor duplicate=db.rawQuery("SELECT COUNT(*) FROM directions WHERE LOWER(name)=LOWER(?)",new String[]{name.trim()});boolean exists=duplicate.moveToFirst()&&duplicate.getInt(0)>0;duplicate.close();if(exists)throw new IllegalArgumentException("Такое направление уже есть.");Cursor c=db.rawQuery("SELECT MAX(CAST(SUBSTR(id,9) AS INTEGER)) FROM directions WHERE id LIKE 'DIR-EXT-%'",null);int next=c.moveToFirst()?c.getInt(0)+1:1;c.close();String id=String.format(Locale.US,"DIR-EXT-%06d",next);ContentValues v=new ContentValues();v.put("id",id);v.put("name",name.trim());v.put("active",1);db.insertOrThrow("directions",null,v);audit(db,"direction.created",id,null,name.trim());}
-    synchronized void createCompany(String name,List<String> allowed,int max){if(name==null||name.trim().length()<2)throw new IllegalArgumentException("Укажите название компании.");if(allowed==null||allowed.isEmpty()||max<1||max>Math.min(3,allowed.size()))throw new IllegalArgumentException("Проверьте разрешённые направления и лимит.");SQLiteDatabase db=getWritableDatabase();for(String direction:allowed){Cursor check=db.rawQuery("SELECT active FROM directions WHERE id=?",new String[]{direction});if(!check.moveToFirst()||check.getInt(0)!=1){check.close();throw new IllegalArgumentException("Выбрано неизвестное или отключённое направление.");}check.close();}Cursor dupe=db.rawQuery("SELECT COUNT(*) FROM companies WHERE LOWER(name)=LOWER(?)",new String[]{name.trim()});boolean exists=dupe.moveToFirst()&&dupe.getInt(0)>0;dupe.close();if(exists)throw new IllegalArgumentException("Компания уже есть.");Cursor c=db.rawQuery("SELECT MAX(CAST(SUBSTR(id,5) AS INTEGER)) FROM companies",null);int next=c.moveToFirst()?c.getInt(0)+1:1;c.close();String id=String.format(Locale.US,"CTR-%03d",next);ContentValues v=new ContentValues();v.put("id",id);v.put("name",name.trim());v.put("status","active");v.put("allowed",joinStrings(allowed));v.put("max_directions",max);db.insertOrThrow("companies",null,v);audit(db,"company.created",id,null,name.trim());}
+    synchronized void createDirection(String name){if(name==null||name.trim().length()<2)throw new IllegalArgumentException("Укажите название направления.");SQLiteDatabase db=getWritableDatabase();Cursor duplicate=db.rawQuery("SELECT name FROM directions",null);boolean exists=false;while(duplicate.moveToNext())if(duplicate.getString(0).equalsIgnoreCase(name.trim())){exists=true;break;}duplicate.close();if(exists)throw new IllegalArgumentException("Такое направление уже есть.");Cursor c=db.rawQuery("SELECT MAX(CAST(SUBSTR(id,9) AS INTEGER)) FROM directions WHERE id LIKE 'DIR-EXT-%'",null);int next=c.moveToFirst()?c.getInt(0)+1:1;c.close();String id=String.format(Locale.US,"DIR-EXT-%06d",next);ContentValues v=new ContentValues();v.put("id",id);v.put("name",name.trim());v.put("active",1);db.insertOrThrow("directions",null,v);audit(db,"direction.created",id,null,name.trim());}
+    synchronized void createCompany(String name,List<String> allowed,int max){
+        if(name==null||name.trim().length()<2)throw new IllegalArgumentException("Укажите название компании.");
+        if(allowed==null||allowed.isEmpty()||allowed.size()>3||new HashSet<>(allowed).size()!=allowed.size()||max<1||max>Math.min(3,allowed.size()))throw new IllegalArgumentException("Проверьте разрешённые направления и лимит.");
+        SQLiteDatabase db=getWritableDatabase();
+        if(companyNameExists(name.trim()))throw new IllegalArgumentException("Компания уже есть.");
+        for(String direction:allowed){Cursor check=db.rawQuery("SELECT active FROM directions WHERE id=?",new String[]{direction});if(!check.moveToFirst()||check.getInt(0)!=1){check.close();throw new IllegalArgumentException("Выбрано неизвестное или отключённое направление.");}check.close();}
+        Cursor c=db.rawQuery("SELECT MAX(CAST(SUBSTR(id,5) AS INTEGER)) FROM companies",null);int next=c.moveToFirst()?c.getInt(0)+1:1;c.close();
+        String id=String.format(Locale.US,"CTR-%03d",next);ContentValues v=new ContentValues();v.put("id",id);v.put("name",name.trim());v.put("status","active");v.put("allowed",joinStrings(allowed));v.put("max_directions",max);db.insertOrThrow("companies",null,v);audit(db,"company.created",id,null,name.trim());
+    }
     Cursor approvals() { return getReadableDatabase().rawQuery("SELECT a.id,e.full_name,a.request_text,a.status,a.requested_by,a.reviewed_by,a.created_at,a.comment FROM approvals a JOIN employees e ON e.id=a.employee_id ORDER BY a.created_at DESC",null); }
     synchronized void requestApproval(String employeeId,String text,String actor){if(text==null||text.trim().length()<5)throw new IllegalArgumentException("Опишите запрос подробнее.");SQLiteDatabase db=getWritableDatabase();ContentValues v=new ContentValues();v.put("employee_id",employeeId);v.put("requested_by",actor);v.put("request_text",text.trim());v.put("status","pending");v.put("created_at",timestamp());long id=db.insertOrThrow("approvals",null,v);audit(db,"approval.requested",String.valueOf(id),null,text.trim());}
     synchronized void decideApproval(long requestId,boolean approve,String actor,String comment){SQLiteDatabase db=getWritableDatabase();Cursor c=db.rawQuery("SELECT requested_by,status FROM approvals WHERE id=?",new String[]{String.valueOf(requestId)});if(!c.moveToFirst()){c.close();throw new IllegalArgumentException("Запрос не найден.");}String requestedBy=c.getString(0),status=c.getString(1);c.close();if(!"pending".equals(status))throw new IllegalArgumentException("Запрос уже рассмотрен.");if(requestedBy.equals(actor))throw new IllegalArgumentException("Инициатор не может согласовать собственный запрос.");ContentValues v=new ContentValues();v.put("status",approve?"approved":"rejected");v.put("reviewed_by",actor);v.put("decided_at",timestamp());v.put("comment",comment==null?"":comment.trim());db.update("approvals",v,"id=?",new String[]{String.valueOf(requestId)});audit(db,"approval."+(approve?"approved":"rejected"),String.valueOf(requestId),"pending",approve?"approved":"rejected");}
@@ -139,7 +159,7 @@ final class RegistryDbHelper extends SQLiteOpenHelper {
                 Cursor prior=db.rawQuery("SELECT direction_id FROM assignments WHERE employee_id=? ORDER BY started_at DESC",new String[]{id}); String direction=null;
                 while(prior.moveToNext()){String candidate=prior.getString(0);if(allowedSet(allowed).contains(candidate)){direction=candidate;break;}}prior.close();
                 if(direction==null)throw new IllegalArgumentException("Для повторной активации выберите разрешённое направление в профиле компании.");
-                ContentValues fresh=new ContentValues(); fresh.put("id",id+"-"+direction+"-"+System.currentTimeMillis()); fresh.put("employee_id",id); fresh.put("company_id",companyId); fresh.put("direction_id",direction); fresh.put("started_at",now); fresh.put("status","active"); fresh.put("comment","Назначение при повторной активации"); db.insertOrThrow("assignments",null,fresh);
+                insertAssignments(db,id,companyId,java.util.Collections.singletonList(direction),now,"Назначение при повторной активации");
             }
             audit(db, "employee.status.changed", id, wasActive ? "active" : "inactive", active ? "active" : "inactive"); db.setTransactionSuccessful();
         } finally { db.endTransaction(); }
